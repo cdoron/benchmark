@@ -28,7 +28,6 @@ import io.openmessaging.benchmark.worker.commands.CumulativeLatencies;
 import io.openmessaging.benchmark.worker.commands.PeriodStats;
 import io.openmessaging.benchmark.worker.commands.ProducerWorkAssignment;
 import io.openmessaging.benchmark.worker.commands.TopicSubscription;
-import io.openmessaging.benchmark.worker.commands.TopicsInfo;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -69,14 +68,21 @@ public class WorkloadGenerator implements AutoCloseable {
 
     public TestResult run() throws Exception {
         Timer timer = new Timer();
+        // List<String> topics =
+        //        worker.createTopics(new TopicsInfo(workload.topics, workload.partitionsPerTopic));
         List<String> topics =
-                worker.createTopics(new TopicsInfo(workload.topics, workload.partitionsPerTopic));
+                new ArrayList<String>() {
+                    {
+                        add("zhcc-test");
+                    }
+                };
         log.info("Created {} topics in {} ms", topics.size(), timer.elapsedMillis());
 
-        createConsumers(topics);
+        // createConsumers(topics);
+        createConsumers(new ArrayList<String>());
         createProducers(topics);
 
-        ensureTopicsAreReady();
+        // ensureTopicsAreReady();
 
         if (workload.producerRate > 0) {
             targetPublishRate = workload.producerRate;
