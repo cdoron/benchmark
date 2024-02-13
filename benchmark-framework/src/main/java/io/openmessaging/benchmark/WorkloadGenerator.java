@@ -78,9 +78,9 @@ public class WorkloadGenerator implements AutoCloseable {
                 };
         log.info("Created {} topics in {} ms", topics.size(), timer.elapsedMillis());
 
-        // createConsumers(topics);
-        createConsumers(new ArrayList<String>());
-        createProducers(topics);
+        createConsumers(topics);
+        // createProducers(topics);
+        createProducers(new ArrayList<String>());
 
         // ensureTopicsAreReady();
 
