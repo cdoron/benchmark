@@ -31,7 +31,6 @@ import io.openmessaging.benchmark.driver.BenchmarkProducer;
 import java.nio.charset.Charset;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -57,8 +56,10 @@ public class KafkaBenchmarkProducer implements BenchmarkProducer {
                         "produce.timestamp",
                         String.valueOf(System.currentTimeMillis()).getBytes(Charset.forName("UTF-8")));
         record.headers().add(h);
-        h = new RecordHeader("unique.id",
-                RandomStringUtils.randomAlphanumeric(20).getBytes(Charset.forName("UTF-8")));
+        h =
+                new RecordHeader(
+                        "unique.id",
+                        RandomStringUtils.randomAlphanumeric(20).getBytes(Charset.forName("UTF-8")));
         record.headers().add(h);
         CompletableFuture<Void> future = new CompletableFuture<>();
 
