@@ -25,7 +25,6 @@ import static io.openmessaging.benchmark.worker.WorkerHandler.PERIOD_STATS;
 import static io.openmessaging.benchmark.worker.WorkerHandler.PROBE_PRODUCERS;
 import static io.openmessaging.benchmark.worker.WorkerHandler.RESET_STATS;
 import static io.openmessaging.benchmark.worker.WorkerHandler.RESUME_CONSUMERS;
-import static io.openmessaging.benchmark.worker.WorkerHandler.START_LOAD;
 import static io.openmessaging.benchmark.worker.WorkerHandler.STOP_ALL;
 import static org.asynchttpclient.Dsl.asyncHttpClient;
 
@@ -97,7 +96,7 @@ public class HttpWorkerClient implements Worker {
     public void startLoad(ProducerWorkAssignment producerWorkAssignment) throws IOException {
         log.debug(
                 "Setting worker assigned publish rate to {} msgs/sec", producerWorkAssignment.publishRate);
-        sendPost(START_LOAD, writer.writeValueAsBytes(producerWorkAssignment));
+        // sendPost(START_LOAD, writer.writeValueAsBytes(producerWorkAssignment));
     }
 
     @Override
