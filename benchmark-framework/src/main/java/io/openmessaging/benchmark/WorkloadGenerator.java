@@ -160,6 +160,8 @@ public class WorkloadGenerator implements AutoCloseable {
 
         long start = System.currentTimeMillis();
         long end = start + 60 * 1000;
+
+        /*
         while (System.currentTimeMillis() < end) {
             CountersStats stats = worker.getCountersStats();
 
@@ -177,6 +179,7 @@ public class WorkloadGenerator implements AutoCloseable {
                 break;
             }
         }
+         */
 
         if (System.currentTimeMillis() >= end) {
             throw new RuntimeException("Timed out waiting for consumers to be ready");
