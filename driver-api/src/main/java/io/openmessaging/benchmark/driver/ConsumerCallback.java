@@ -26,6 +26,8 @@ public interface ConsumerCallback {
      */
     void messageReceived(byte[] payload, long publishTimestamp);
 
+    void messageReceived(byte[] payload, long publishTimestamp, long headerTimestamp);
+
     /**
      * Driver should invoke this method (or the byte[] variant) once for each message received.
      *
