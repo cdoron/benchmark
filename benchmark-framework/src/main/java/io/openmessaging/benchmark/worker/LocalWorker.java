@@ -252,9 +252,27 @@ public class LocalWorker implements Worker, ConsumerCallback {
         internalMessageReceived(data.remaining(), publishTimestamp);
     }
 
+    @Override
+    public void messageReceived(byte[] data, long publishTimestamp, long headerTimestamp) {
+        internalMessageReceived(data.length, publishTimestamp, headerTimestamp);
+    }
+
     public void internalMessageReceived(int size, long publishTimestamp) {
         long now = System.currentTimeMillis();
         long endToEndLatencyMicros = TimeUnit.MILLISECONDS.toMicros(now - publishTimestamp);
+        stats.recordMessageReceived(size, endToEndLatencyMicros);
+
+        while (consumersArePaused) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void internalMessageReceived(int size, long publishTimestamp, long headerTimestamp) {
+        long endToEndLatencyMicros = TimeUnit.MILLISECONDS.toMicros(publishTimestamp - headerTimestamp);
         stats.recordMessageReceived(size, endToEndLatencyMicros);
 
         while (consumersArePaused) {

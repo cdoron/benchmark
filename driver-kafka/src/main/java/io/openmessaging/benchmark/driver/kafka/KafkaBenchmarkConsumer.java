@@ -16,6 +16,8 @@ package io.openmessaging.benchmark.driver.kafka;
 
 import io.openmessaging.benchmark.driver.BenchmarkConsumer;
 import io.openmessaging.benchmark.driver.ConsumerCallback;
+
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +31,8 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.header.Header;
+import org.apache.kafka.common.header.Headers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,8 +74,14 @@ public class KafkaBenchmarkConsumer implements BenchmarkConsumer {
                                             consumer.poll(Duration.ofMillis(pollTimeoutMs));
 
                                     Map<TopicPartition, OffsetAndMetadata> offsetMap = new HashMap<>();
+                                    long headerTimestamp = 0;
                                     for (ConsumerRecord<String, byte[]> record : records) {
-                                        callback.messageReceived(record.value(), record.timestamp());
+                                        Headers headers = record.headers();
+                                        for (Header h : headers.headers("produce.timestamp")) {
+                                            headerTimestamp = Long.parseLong(new String(h.value(),
+                                                    StandardCharsets.UTF_8));
+                                        }
+                                        callback.messageReceived(record.value(), record.timestamp(), headerTimestamp);
 
                                         offsetMap.put(
                                                 new TopicPartition(record.topic(), record.partition()),
