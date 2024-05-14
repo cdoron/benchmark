@@ -83,7 +83,8 @@ public class WorkloadGenerator implements AutoCloseable {
         createConsumers(new ArrayList<String>());
         createProducers(topics);
 
-        // ensureTopicsAreReady();
+        ensureTopicsAreReady();
+        // Thread.sleep(181000);
 
         if (workload.producerRate > 0) {
             targetPublishRate = workload.producerRate;
@@ -160,12 +161,12 @@ public class WorkloadGenerator implements AutoCloseable {
         // first publishing
         // some message on the topic, which will then trigger the partitions assignment to the consumers
 
-        int expectedMessages = workload.topics * workload.subscriptionsPerTopic;
+        // int expectedMessages = workload.topics * workload.subscriptionsPerTopic;
 
         // In this case we just publish 1 message and then wait for consumers to receive the data
         worker.probeProducers();
 
-        long start = System.currentTimeMillis();
+        /* long start = System.currentTimeMillis();
         long end = start + 60 * 1000;
         while (System.currentTimeMillis() < end) {
             CountersStats stats = worker.getCountersStats();
@@ -189,7 +190,7 @@ public class WorkloadGenerator implements AutoCloseable {
             throw new RuntimeException("Timed out waiting for consumers to be ready");
         } else {
             log.info("All consumers are ready");
-        }
+        } */
     }
 
     /**
